@@ -1,18 +1,26 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import { HashRouter, Route } from 'react-router-dom';
+import { ThemeProvider } from 'styled-components';
+
+// COMPONENTS
 import App from './App';
-import './index.css';
+import store from './store';
 
-import { auth, uidKey, dataKey, timestampKey, firestore, isAuthenticated } from './firebase';
+// CONFIG
+import theme from './styles/theme';
+import { startListeningToAuthChanges } from './actions/authActions';
 
-const startListeningToAuthChanges = () => {
-  auth.onAuthStateChanged(user => {
-    if (user) {
-      console.log('user', user);
-    }
-  });
-};
+store.dispatch(startListeningToAuthChanges());
 
-startListeningToAuthChanges();
-
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(
+  <HashRouter>
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <Route component={App} />
+      </ThemeProvider>
+    </Provider>
+  </HashRouter>,
+  document.getElementById('root')
+);

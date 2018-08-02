@@ -1,45 +1,38 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
-import { isAuthenticated } from './firebase';
+import { connect } from 'react-redux';
+import { Switch, Route } from 'react-router-dom';
+import globals from './styles/global';
 
 // const { ipcRenderer } = window.require('electron');
 
 // const { app } = window.require('electron').remote;
+// COMPONENTS
+import SignUp from './scenes/Auth/SignUp';
+import Logger from './scenes/Logger';
+
+// ACTIONS/CONFIG
+import { uidKey } from './firebase';
 
 class App extends Component {
-  componentDidMount() {
-    // let n = new Notification('You did it!', {
-    //   body: 'Nice work.'
-    // });
-    // console.log(n);
-    // n.onclick = () => {
-    //   ipcRenderer.send('show-window');
-    // };
-  }
-
   render() {
-    if (!isAuthenticated()) {
-      return <div>SIgn up first</div>;
+    const { isAuthenticated } = this.props;
+
+    if (isAuthenticated || localStorage.getItem(uidKey)) {
+      return (
+        <Switch>
+          <Route path="/" component={Logger} />
+        </Switch>
+      );
     }
 
-    return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>
-            Reacton + Electron ={' '}
-            <span role="img" aria-label="love">
-              😍
-            </span>
-          </h2>
-        </div>
-        <p className="App-intro">
-          <b> Release 0.2.7 </b>
-        </p>
-      </div>
-    );
+    return <SignUp />;
   }
 }
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    isAuthenticated: !!state.auth.uid
+  };
+};
+
+export default connect(mapStateToProps)(App);
