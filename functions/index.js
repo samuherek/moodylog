@@ -10,7 +10,25 @@ admin.initializeApp(functions.config().firebase);
 //  response.send("Hello from Firebase!");
 // });
 
-exports.createProfile = functions.auth.user().onCreate((userRecord, context) => {
+exports.createProfile = functions.auth.user().onCreate(user => {
   // Do something after a new user account is created
-  console.log('creating a new account???');
+  console.log('creating a new account???', user);
+
+  const profile = {
+    email: user.data.email,
+    displayName: user.data.displayName
+  };
+
+  functions.firestore
+    .collection(`users`)
+    .document(user.data.uid)
+    .set(profile)
+    .then(result => {
+      console.log('SUCCESS: user created:', result);
+      return;
+    })
+    .catch(err => {
+      console.log('ERROR: user creation:', err);
+      return;
+    });
 });
