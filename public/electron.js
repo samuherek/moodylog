@@ -8,10 +8,10 @@ process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = true;
 let tray;
 let mainWindow;
 
-require('update-electron-app')({
-  repo: 'kitze/react-electron-example',
-  updateInterval: '1 hour'
-});
+// require('update-electron-app')({
+//   repo: 'kitze/react-electron-example',
+//   updateInterval: '1 hour'
+// });
 
 function createWindow() {
   // Setup the menubar with an icon
@@ -30,11 +30,12 @@ function createWindow() {
   });
 
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 800,
+    width: 300,
+    height: 350,
     show: false,
     frame: false,
-    resizable: false
+    resizable: false,
+    transparent: true
   });
   mainWindow.loadURL(
     isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`

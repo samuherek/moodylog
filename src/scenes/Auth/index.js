@@ -19,6 +19,7 @@ const Wrap = styled.div`
   align-items: center;
   min-height: 100%;
   color: white;
+  background: #1d509b;
 
   form {
     display: flex;

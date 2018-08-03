@@ -1,8 +1,8 @@
 {
-  "name": "cra-electron",
-  "description": "CRA + Electron sitting in a tree",
-  "author": "Kitze",
-  "version": "0.2.7",
+  "name": "moodylog",
+  "description": "Log your life in a simple way",
+  "author": "Sam Uherek",
+  "version": "0.0.1",
   "private": true,
   "dependencies": {
     "autoprefixer": "7.1.6",
@@ -30,7 +30,7 @@
     "eslint-plugin-react": "7.4.0",
     "extract-text-webpack-plugin": "3.0.2",
     "file-loader": "1.1.5",
-    "firebase": "^5.3.0",
+    "firebase": "^4.6.2",
     "fs-extra": "3.0.1",
     "html-webpack-plugin": "2.29.0",
     "informed": "^1.8.1",
@@ -81,7 +81,7 @@
     "react-test": "node scripts/test.js --env=jsdom",
     "react-eject": "node scripts/eject.js",
     "electron-build": "electron-builder",
-    "release": "yarn react-build && electron-builder --publish=always",
+    "release": "yarn react-build && electron-builder --publish=never",
     "build": "yarn react-build && yarn electron-build",
     "start": "concurrently \"cross-env BROWSER=none yarn react-start\" \"wait-on http://localhost:3000 && electron .\""
   },
