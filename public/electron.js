@@ -4,7 +4,7 @@ const { app, BrowserWindow, ipcMain, Tray, nativeImage } = require('electron');
 const path = require('path');
 const isDev = require('electron-is-dev');
 // const notifier = require('node-notifier');
-
+process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = true;
 let tray;
 let mainWindow;
 

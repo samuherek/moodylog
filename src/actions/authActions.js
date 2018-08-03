@@ -1,5 +1,5 @@
 import * as types from './actionTypes';
-import { auth, uidKey, isAuthenticated } from '../firebase';
+import { auth, uidKey } from '../firebase';
 
 export function signIn(user) {
   return {
@@ -16,12 +16,17 @@ export function signOut() {
   };
 }
 
+export function authDone() {
+  return {
+    type: types.AUTH_DONE
+  };
+}
+
 // MIDDLEWARE
 const authUserSignOut = dispatch => {
-  auth.signOut().then(res => {
-    localStorage.removeItem(uidKey);
-    console.log('signing out', res);
+  auth.signOut().then(() => {
     dispatch(signOut());
+    localStorage.removeItem(uidKey);
   });
 };
 
@@ -30,16 +35,17 @@ export function startListeningToAuthChanges() {
     const localUser = localStorage.getItem(uidKey);
 
     auth.onAuthStateChanged(user => {
-      console.log('user', user, auth.currentUser);
       if (user) {
         if (!localUser || localUser !== user) {
           localStorage.setItem(uidKey, user.uid);
         }
-        // Sing in user
-        dispatch(signIn({ email: user.email, uid: user.uid }));
-      } else if (!user && isAuthenticated()) {
-        authUserSignOut(dispatch);
+        dispatch(signIn(user));
+      } else {
+        if (auth.currentUser) {
+          authUserSignOut(dispatch);
+        }
       }
+      dispatch(authDone());
     });
   };
 }
@@ -47,5 +53,15 @@ export function startListeningToAuthChanges() {
 export function signOutUser() {
   return function signOutUserThunk(dispatch) {
     authUserSignOut(dispatch);
+  };
+}
+
+export function createNewUser(email, password) {
+  return function createNewUserThunk(dispatch) {
+    return auth.createUserWithEmailAndPassword(email, password).then(() => {
+      auth.currentUser.sendEmailVerification().catch(function(error) {
+        console.log('error sending', error);
+      });
+    });
   };
 }

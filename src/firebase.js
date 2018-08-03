@@ -25,7 +25,7 @@ export const dataKey = 'KEY_FOR_LOCAL_STORAGE_DATA';
 export const timestampKey = 'KEY_FOR_LOCAL_STORAGE_TIMESTAMP';
 
 export const isAuthenticated = () => {
-  console.log(auth.currentUser, !!auth.currentUser);
+  // console.log(auth.currentUser, !!auth.currentUser);
   return !!auth.currentUser;
 };
 export const getToken = () => {

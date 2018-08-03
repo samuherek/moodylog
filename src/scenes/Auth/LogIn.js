@@ -1,20 +1,20 @@
 // NPM
 import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { Form, Text } from 'informed';
+import styled from 'styled-components';
 
 // COMPONENTS
 import Button from '../../components/Button';
 
 // ACTIONS/CONFIG
-import { createNewUser } from '../../actions/authActions';
+import { auth } from '../../firebase';
 import Utils from '../../utils/Utils';
 
 // STYLES
 
 // MODULE
-class SignUp extends Component {
+export default class LogIn extends Component {
   constructor() {
     super();
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
@@ -23,11 +23,9 @@ class SignUp extends Component {
 
   handleFormSubmit(form) {
     const { onError } = this.props;
-    const { email, password } = form;
-
-    createNewUser(email, password).catch(error => {
-      onError({ signUp: `${error.code} ${error.message}` });
-      console.log(error.code, error.message);
+    auth.signInWithEmailAndPassword(form.email, form.password).catch(error => {
+      onError(error);
+      this.formApi.reset();
     });
   }
 
@@ -52,16 +50,11 @@ class SignUp extends Component {
           placeholder="Password"
           validate={Utils.validatePassword}
         />
-        <Button type="submit">Sign up</Button>
+        <Button type="submit">Log in</Button>
       </Form>
     );
   }
 }
 
 // Props Validation
-SignUp.propTypes = {};
-
-export default connect(
-  undefined,
-  { createNewUser }
-)(SignUp);
+LogIn.propTypes = {};

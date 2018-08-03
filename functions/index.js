@@ -15,13 +15,14 @@ exports.createProfile = functions.auth.user().onCreate(user => {
   console.log('creating a new account???', user);
 
   const profile = {
-    email: user.data.email,
-    displayName: user.data.displayName
+    email: user.email,
+    displayName: user.displayName
   };
 
-  functions.firestore
+  return admin
+    .firestore()
     .collection(`users`)
-    .document(user.data.uid)
+    .doc(user.uid)
     .set(profile)
     .then(result => {
       console.log('SUCCESS: user created:', result);

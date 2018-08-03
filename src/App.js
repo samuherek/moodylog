@@ -7,17 +7,20 @@ import globals from './styles/global';
 
 // const { app } = window.require('electron').remote;
 // COMPONENTS
-import SignUp from './scenes/Auth/SignUp';
+import Auth from './scenes/Auth';
 import Logger from './scenes/Logger';
 
 // ACTIONS/CONFIG
-import { uidKey } from './firebase';
 
 class App extends Component {
   render() {
-    const { isAuthenticated } = this.props;
+    const { isAuthenticated, loading } = this.props;
 
-    if (isAuthenticated || localStorage.getItem(uidKey)) {
+    if (loading) {
+      return <div>Loading</div>;
+    }
+
+    if (isAuthenticated) {
       return (
         <Switch>
           <Route path="/" component={Logger} />
@@ -25,13 +28,14 @@ class App extends Component {
       );
     }
 
-    return <SignUp />;
+    return <Auth />;
   }
 }
 
 const mapStateToProps = state => {
   return {
-    isAuthenticated: !!state.auth.uid
+    isAuthenticated: !!state.auth.uid,
+    loading: state.auth.loading
   };
 };
 

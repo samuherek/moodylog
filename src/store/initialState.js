@@ -4,6 +4,7 @@ export default {
     email: '',
     uid: '',
     token: '',
-    fetching: true
+    verified: false,
+    loading: true
   }
 };
